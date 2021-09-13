@@ -1,0 +1,31 @@
+@tailwind components;
+@layer components {
+  .option {
+    @apply cursor-pointer hover:bg-gray-100 transition duration-200 ease-out p-2 rounded-lg;
+  }
+}
+.page-height {
+  height: 1066px !important;
+  width: 826px !important;
+}
+.DraftEditor-editorContainer,
+.DraftEditor-root,
+.public-DraftEditor-content {
+  height: 0 !important;
+}
+.editor-toolbar-top {
+  top: 56.5px !important;
+}
+
+.tab-icon {
+  margin-top: 10px;
+}
+
+.x-spreadsheet-sheet {
+  height: 83vh !important;
+}
+
+.equal-spaced-view {
+  display: grid;
+  grid-template-columns: repeat(2, calc(100% / 2));
+}
