@@ -54,12 +54,14 @@ export default function DateField({
           <Close />
         </IconButton>
       </div>
-      <DateValidationUI
-        handleOptionValue={handleOptionValue}
-        optionData={optionData}
-        optionIndex={optionIndex}
-        questionIndex={questionIndex}
-      />
+      {!time && (
+        <DateValidationUI
+          handleOptionValue={handleOptionValue}
+          optionData={optionData}
+          optionIndex={optionIndex}
+          questionIndex={questionIndex}
+        />
+      )}
     </>
   );
 }

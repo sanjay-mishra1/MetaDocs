@@ -4,7 +4,7 @@ import { IconButton, TextField } from "@material-ui/core";
 import Close from "@material-ui/icons/Close";
 
 export default function Dropdown({
-  optionText,
+  optionData,
   handleOptionValue,
   uploadImage,
   questionIndex,
@@ -14,7 +14,7 @@ export default function Dropdown({
 }) {
   const handleValue = (e) => {
     handleOptionValue(
-      { optionText: e.target.value },
+      { ...optionData, optionText: e.target.value },
       questionIndex,
       optionIndex
     );
@@ -43,7 +43,7 @@ export default function Dropdown({
         variant="outlined"
         placeholder="Option text"
         style={{ marginTop: "5px" }}
-        value={optionText}
+        value={optionData.optionText}
         onChange={handleValue}
       />
       <IconButton

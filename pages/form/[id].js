@@ -12,7 +12,13 @@ function UserForm() {
   const router = useRouter();
 
   if (!session) return <Login />;
-  return <CreateForm userid={session.user.email} formId={router.query} />;
+  return (
+    <CreateForm
+      userid={session.user.email}
+      formId={router.query}
+      userimage={session?.user?.image}
+    />
+  );
 }
 
 export default UserForm;

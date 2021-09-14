@@ -17,7 +17,13 @@ import RadioGroup from "@material-ui/core/RadioGroup";
 import Divider from "@material-ui/core/Divider";
 import { makeStyles } from "@material-ui/core/styles";
 import FormFooter from "./FormFooter";
-
+import SingleSelection from "../components/SingleSelection";
+import MultiSelection from "../components/MultiSelection";
+import DateField from "../components/DateField";
+import FileUploader from "../components/FileUploader";
+import Rating from "../components/Rating";
+import TextDataField from "../components/TextDataField";
+import Dropdown from "../components/Dropdown";
 const useStyles = makeStyles((theme) => ({}));
 
 function UserView(props) {
@@ -41,6 +47,7 @@ function UserView(props) {
   const handleRadioChange = (questionId, optionId) => {
     console.log("radio clicked ", optionId, questionId);
     responseData[questionId] = optionId;
+    console.log("Response data", responseData);
   };
 
   React.useEffect(() => {
@@ -104,61 +111,40 @@ function UserView(props) {
 
   return (
     <div style={{ minHeight: "100vh" }}>
-      <div>
-        <AppBar position="static" style={{ backgroundColor: "teal" }}>
-          <Toolbar>
-            <IconButton
-              edge="start"
-              style={{ marginRight: "10px", marginBottom: "5px" }}
-              color="inherit"
-              aria-label="menu"
-            >
-              <MenuIcon />
-            </IconButton>
-            <Typography variant="h6" style={{}}>
-              Velocity Forms
-            </Typography>
-          </Toolbar>
-        </AppBar>
-        <br></br>
-
+      <div className="pt-10">
         <Grid
           container
           direction="column"
           justifyContent="center"
           alignItems="center"
         >
-          <Grid item xs={12} sm={5} style={{ width: "100%" }}>
+          <Grid item xs={12} sm={6} style={{ width: "100%" }}>
             <Grid style={{ borderTop: "10px solid teal", borderRadius: 10 }}>
-              <div>
-                <div>
-                  <Paper elevation={2} style={{ width: "100%" }}>
-                    <div
-                      style={{
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "flex-start",
-                        marginLeft: "15px",
-                        paddingTop: "20px",
-                        paddingBottom: "20px",
-                      }}
-                    >
-                      <Typography
-                        variant="h4"
-                        style={{
-                          fontFamily: "sans-serif Roboto",
-                          marginBottom: "15px",
-                        }}
-                      >
-                        {formData.name}
-                      </Typography>
-                      <Typography variant="subtitle1">
-                        {formData.description}
-                      </Typography>
-                    </div>
-                  </Paper>
+              <Paper elevation={2} style={{ width: "100%" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
+                    marginLeft: "15px",
+                    paddingTop: "20px",
+                    paddingBottom: "20px",
+                  }}
+                >
+                  <Typography
+                    variant="h4"
+                    style={{
+                      fontFamily: "sans-serif Roboto",
+                      marginBottom: "15px",
+                    }}
+                  >
+                    {formData.name}
+                  </Typography>
+                  <Typography variant="subtitle1">
+                    {formData.description}
+                  </Typography>
                 </div>
-              </div>
+              </Paper>
             </Grid>
 
             {!isSubmitted ? (
@@ -201,49 +187,14 @@ function UserView(props) {
                             )}
 
                             <div>
-                              <RadioGroup
-                                aria-label="quiz"
-                                name="quiz"
-                                value={responseData[ques.id]}
-                                onChange={(e) => {
-                                  handleRadioChange(ques.id, e.target.value);
+                              <SingleSelection
+                                questionViewData={{
+                                  questionId: ques.id,
+                                  options: ques.options,
+                                  actionMethod: handleRadioChange,
+                                  responseData: responseData,
                                 }}
-                              >
-                                {ques.options.map((option, index) => (
-                                  <div key={option.id}>
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        marginLeft: "7px",
-                                      }}
-                                    >
-                                      <FormControlLabel
-                                        value={option.id}
-                                        control={<Radio />}
-                                        label={option.optionText}
-                                      />
-                                    </div>
-
-                                    <div
-                                      style={{
-                                        display: "flex",
-                                        marginLeft: "10px",
-                                      }}
-                                    >
-                                      {option.optionImage !== "" ? (
-                                        <img
-                                          src={option.optionImage}
-                                          width="64%"
-                                          height="auto"
-                                        />
-                                      ) : (
-                                        ""
-                                      )}
-                                      <Divider />
-                                    </div>
-                                  </div>
-                                ))}
-                              </RadioGroup>
+                              />
                             </div>
                           </div>
                         </div>

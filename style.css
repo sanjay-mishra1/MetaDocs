@@ -29,3 +29,7 @@
   display: grid;
   grid-template-columns: repeat(2, calc(100% / 2));
 }
+
+button:focus {
+  outline: none;
+}

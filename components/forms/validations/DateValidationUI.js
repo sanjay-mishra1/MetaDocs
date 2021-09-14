@@ -1,18 +1,8 @@
-import {
-  Checkbox,
-  ClickAwayListener,
-  FormControlLabel,
-  Grid,
-  Grow,
-  MenuItem,
-  MenuList,
-  Paper,
-  Popper,
-  TextField,
-} from "@material-ui/core";
-import React from "react";
-import { attachmentTypes, dateValidationTypes } from "../../../files/Lists";
-import Autocomplete from "@material-ui/lab/Autocomplete";
+import { TextField } from "@material-ui/core";
+import dayjs from "dayjs";
+
+import React, { useState } from "react";
+import { dateValidationTypes } from "../../../files/Lists";
 
 export default function DateValidationUI({
   handleOptionValue,
@@ -21,44 +11,25 @@ export default function DateValidationUI({
   optionData,
 }) {
   const [showFileType, setShowFileType] = React.useState(
-    !optionData && optionData.allowed
-      ? optionData.allowed.includes("any")
-        ? false
-        : true
-      : false
+    !optionData || !optionData.allowed
+      ? "any"
+      : optionData.allowed.includes("any")
+      ? "any"
+      : "range"
   );
-  const anchorRef = React.useRef(null);
-  const [open, setOpen] = React.useState(false);
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
-
-  const handleClose = (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
-    }
-
-    setOpen(false);
-  };
-
-  function handleListKeyDown(event) {
-    if (event.key === "Tab") {
-      event.preventDefault();
-      setOpen(false);
-    }
-  }
-
-  // return focus to the button when we transitioned from !open -> open
-  const prevOpen = React.useRef(open);
-  React.useEffect(() => {
-    if (prevOpen.current === true && open === false) {
-      anchorRef.current.focus();
-    }
-
-    prevOpen.current = open;
-  }, [open]);
-
-  const handleCheckbox = (type) => {
+  const [fromDate, setFromDate] = useState(
+    optionData.allowed && optionData.allowed.length === 3
+      ? optionData.allowed[1]
+      : ""
+  );
+  const [toDate, setToDate] = useState(
+    optionData.allowed && optionData.allowed.length === 3
+      ? optionData.allowed[2]
+      : ""
+  );
+  const [id] = React.useState(new Date().getTime() + "");
+  const handleCheckbox = () => {
+    let type = document.getElementById(id).value;
     console.log("value change", type);
     if (!type || type.toLowerCase().includes("any")) setShowFileType(false);
     else setShowFileType(true);
@@ -67,103 +38,79 @@ export default function DateValidationUI({
       questionIndex,
       optionIndex
     );
-    console.log("value change", optionData);
+    console.log("value change", optionData, optionData.allowed);
   };
-  const name = [];
-  dateValidationTypes.forEach((item) => name.push(item.name));
-  const type = [];
-  dateValidationTypes.forEach((item) => type.push(item.type));
+  const handleFromValue = (e) => {
+    if (!optionData.allowed) {
+      optionData.allowed = ["", "", ""];
+    }
+    let items = optionData.allowed;
+    items.length = 3;
+    items[1] = e.target.value;
+    optionData.allowed = items;
+    console.log(optionData);
+    setFromDate(e.target.value);
+  };
+  const handleToValue = (e) => {
+    if (!optionData.allowed) {
+      optionData.allowed = ["", "", ""];
+    }
+    let items = optionData.allowed;
+    items.length = 3;
+    items[2] = e.target.value;
+    optionData.allowed = items;
+    console.log(optionData);
+    setToDate(e.target.value);
+  };
   return (
     <div className="ml-8">
       <p>Date Validation</p>
       <div>
         {
           <div className="equal-spaced-view">
-            <TextField
-              fullWidth={true}
-              variant="outlined"
-              style={{ marginTop: "5px" }}
-              ref={anchorRef}
-              aria-controls={open ? "menu-list-grow" : undefined}
-              aria-haspopup="true"
-              onClick={handleToggle}
-            />
-            <Option
-              open={open}
-              anchorRef={anchorRef}
-              handleClose={handleClose}
-              handleListKeyDown={handleListKeyDown}
-              handleCheckbox={handleCheckbox}
-            />
+            <select
+              id={id}
+              className="w-40 border-2 font-semibold py-2 px-4 rounded inline-flex items-center"
+              defaultValue={optionData.allowed ? optionData.allowed[0] : "any"}
+              onChange={handleCheckbox}
+            >
+              {dateValidationTypes.map((item) => (
+                <option
+                  key={item.name}
+                  className="rounded-t  py-2 px-4 block whitespace-no-wrap"
+                  value={item.type}
+                >
+                  {item.name}
+                </option>
+              ))}
+            </select>
           </div>
         }
-        {showFileType && (
-          <div className="flex">
-            <TextField
-              fullWidth={true}
-              variant="outlined"
-              label="From"
-              type="date"
-              style={{ marginTop: "5px" }}
-              // value={optionData.optionText}
-              // onChange={handleValue}
-            />
-            <TextField
-              fullWidth={true}
-              variant="outlined"
-              label="To"
-              type="date"
-              style={{ marginTop: "5px" }}
-              // value={optionData.optionText}
-              // onChange={handleValue}
-            />
-          </div>
-        )}
+        {showFileType &&
+          optionData.allowed &&
+          !optionData.allowed.includes("any") && (
+            <div className="flex">
+              <TextField
+                fullWidth={true}
+                variant="outlined"
+                label="From"
+                type="date"
+                style={{ marginTop: "5px" }}
+                value={fromDate}
+                onChange={handleFromValue}
+              />
+              <TextField
+                fullWidth={true}
+                variant="outlined"
+                label="To"
+                type="date"
+                style={{ marginTop: "5px" }}
+                value={toDate}
+                onChange={handleToValue}
+              />
+            </div>
+          )}
       </div>
     </div>
   );
 }
-
-const Option = ({
-  open,
-  anchorRef,
-  handleClose,
-  handleListKeyDown,
-  handleCheckbox,
-}) => {
-  return (
-    <Popper
-      open={open}
-      anchorEl={anchorRef.current}
-      role={undefined}
-      transition
-      disablePortal
-    >
-      {({ TransitionProps, placement }) => (
-        <Grow
-          {...TransitionProps}
-          style={{
-            transformOrigin:
-              placement === "bottom" ? "center top" : "center bottom",
-          }}
-        >
-          <Paper>
-            <ClickAwayListener onClickAway={handleClose}>
-              <MenuList
-                autoFocusItem={open}
-                id="menu-list-grow"
-                onKeyDown={handleListKeyDown}
-              >
-                {dateValidationTypes.map((item) => (
-                  <MenuItem onClick={() => handleCheckbox(item.type)}>
-                    {item.name}
-                  </MenuItem>
-                ))}
-              </MenuList>
-            </ClickAwayListener>
-          </Paper>
-        </Grow>
-      )}
-    </Popper>
-  );
-};

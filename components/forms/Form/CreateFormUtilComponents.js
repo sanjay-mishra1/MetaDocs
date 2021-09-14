@@ -252,12 +252,20 @@ export const FormActions = ({ addMoreQuestionField, saveQuestions }) => {
   );
 };
 
-export const FormHeader = ({ name, description }) => {
+export const FormHeader = ({ formData }) => {
+  const [editVisible, setEditVisible] = React.useState(false);
+  const [name, setName] = React.useState(formData.name);
+  const [description, setDescription] = React.useState(formData.description);
+  const handleValue = (type, text) => {
+    formData[type] = text;
+    if (type === "name") setName(text);
+    else setDescription(text);
+  };
   return (
     <Grid style={{ borderTop: "10px solid teal", borderRadius: 10 }}>
       <div>
-        <div>
-          <Paper elevation={2} style={{ width: "100%" }}>
+        <Paper elevation={2} style={{ width: "100%" }}>
+          {!editVisible ? (
             <div
               style={{
                 display: "flex",
@@ -268,19 +276,66 @@ export const FormHeader = ({ name, description }) => {
                 paddingBottom: "20px",
               }}
             >
-              <Typography
-                variant="h4"
-                style={{
-                  fontFamily: "sans-serif Roboto",
-                  marginBottom: "15px",
-                }}
-              >
-                {name}
+              <div className="flex justify-between align-top w-full">
+                <Typography
+                  variant="h4"
+                  style={{
+                    fontFamily: "sans-serif Roboto",
+                    marginBottom: "15px",
+                  }}
+                >
+                  {formData.name}
+                </Typography>
+                <IconButton
+                  className="w-8 h-8 bg-blue-300"
+                  onClick={() => setEditVisible(true)}
+                >
+                  <Icon name="edit" />
+                </IconButton>
+              </div>
+              <Typography variant="subtitle1">
+                {formData.description}
               </Typography>
-              <Typography variant="subtitle1">{description}</Typography>
             </div>
-          </Paper>
-        </div>
+          ) : (
+            <div className="p-5">
+              <TextField
+                fullWidth
+                onChange={(e) => handleValue("name", e.target.value)}
+                variant="outlined"
+                style={{ height: "5em" }}
+                value={name}
+                label="Title"
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+
+              <TextField
+                fullWidth
+                onChange={(e) => handleValue("description", e.target.value)}
+                variant="outlined"
+                multiline
+                maxRows={3}
+                minRows={3}
+                value={description}
+                label="Description"
+                style={{ height: "7em" }}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+              />
+              <br />
+              <Button
+                onClick={() => setEditVisible(false)}
+                variant="contained"
+                color="primary"
+              >
+                Done
+              </Button>
+            </div>
+          )}
+        </Paper>
       </div>
     </Grid>
   );

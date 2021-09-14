@@ -29,10 +29,6 @@ import Snackbar from "@material-ui/core/Snackbar";
 import IconButton from "@material-ui/core/IconButton";
 import CloseIcon from "@material-ui/icons/Close";
 
-import StarBorderIcon from "@material-ui/icons/StarBorder";
-
-import ViewListIcon from "@material-ui/icons/ViewList";
-
 import QuestionsTab from "./QuestionsTab";
 import ResponseTab from "../Response/ResponseTab";
 import formService from "../../../files/apis";
@@ -143,65 +139,66 @@ function EditForm(props) {
       {formDeatils.createdBy === user ? (
         <div>
           <div className={classes.root}>
-            <AppBar
-              position="static"
-              style={{ backgroundColor: "white" }}
-              elevation={2}
-            >
-              <Toolbar className={classes.toolbar}>
-                <IconButton
-                  edge="start"
-                  className={classes.menuButton}
-                  aria-label="Rohit Saini's form"
-                  style={{ color: "#140078" }}
-                >
-                  <ViewListIcon />
-                </IconButton>
-                <Typography
-                  variant="h6"
-                  noWrap
-                  style={{ marginTop: "8.5px", color: "black" }}
-                >
-                  {formDeatils.name}
-                </Typography>
+            <Paper>
+              <div className="inline justify-between mr-4 ml-2 sm:flex">
+                <div className="flex justify-center">
+                  <IconButton
+                    edge="start"
+                    className={classes.menuButton}
+                    aria-label="Rohit Saini's form"
+                    style={{ color: "#140078" }}
+                  >
+                    <img src="/forms.png" className="w-10" />
+                  </IconButton>
+                  <Typography
+                    variant="h6"
+                    noWrap
+                    style={{ marginTop: "8.5px", color: "black" }}
+                  >
+                    {formDeatils.name}
+                  </Typography>
+                </div>
 
-                <IconButton aria-label="Rohit Saini's form">
-                  <StarBorderIcon />
-                </IconButton>
+                <div>
+                  <IconButton aria-label="search" onClick={sendForm}>
+                    <SendIcon />
+                  </IconButton>
+                  <IconButton aria-label="search">
+                    <PaletteIcon />
+                  </IconButton>
+                  <IconButton aria-label="search">
+                    <VisibilityIcon />
+                  </IconButton>
+                  <IconButton aria-label="search">
+                    <SettingsIcon />
+                  </IconButton>
 
-                <Tabs
-                  className={classes.title}
-                  value={value}
-                  onChange={handleChange}
-                  indicatorColor="primary"
-                  textColor="primary"
-                  centered
-                >
-                  <Tab label="Questions" />
-                  <Tab label="Responses" />
-                </Tabs>
-                <IconButton aria-label="search" onClick={sendForm}>
-                  <SendIcon />
-                </IconButton>
-
-                <IconButton aria-label="search">
-                  <PaletteIcon />
-                </IconButton>
-                <IconButton aria-label="search">
-                  <VisibilityIcon />
-                </IconButton>
-                <IconButton aria-label="search">
-                  <SettingsIcon />
-                </IconButton>
-
-                <IconButton aria-label="display more actions" edge="end">
-                  <MoreIcon />
-                </IconButton>
-                <IconButton aria-label="display more actions" edge="end">
-                  <AccountCircleIcon />
-                </IconButton>
-              </Toolbar>
-            </AppBar>
+                  <IconButton aria-label="display more actions" edge="end">
+                    <MoreIcon />
+                  </IconButton>
+                  <IconButton aria-label="display more actions" edge="end">
+                    <img
+                      name="apps"
+                      loading="lazy"
+                      className="cursor-pointer h-8 w-8 rounded-full ml-2"
+                      src={props.userimage}
+                      size="2xl"
+                    />
+                  </IconButton>
+                </div>
+              </div>
+              <Tabs
+                className={classes.title}
+                value={value}
+                onChange={handleChange}
+                indicatorColor="primary"
+                textColor="primary"
+                centered
+              >
+                <Tab label="Questions" />
+                <Tab label="Responses" />
+              </Tabs>
+            </Paper>
           </div>
           <div>
             <Dialog
@@ -237,13 +234,6 @@ function EditForm(props) {
                     </Grid>
                   </Grid>
                 </Paper>
-                {/* <div style={{padding: '7px', display: 'flex'}}>
-                  <Typography variant="body1">{window.location.origin + "/s/" + formDeatils._id}</Typography>
-                    
-                  <IconButton onClick={() =>  navigator.clipboard.writeText(window.location.origin + "/s/" + formDeatils._id)}  >
-                    <MoreIcon />
-                  </IconButton>
-                  </div> */}
 
                 <DialogContentText id="alert-dialog-description"></DialogContentText>
               </DialogContent>
@@ -277,14 +267,14 @@ function EditForm(props) {
             />
           </div>
 
-          <div>
+          <>
             <TabPanel value={value} index={0}>
               <QuestionsTab formData={formDeatils} />
             </TabPanel>
             <TabPanel value={value} index={1}>
               <ResponseTab formData={formDeatils} formId={formID} />
             </TabPanel>
-          </div>
+          </>
         </div>
       ) : (
         <UserView user={user} formId={formID} />
@@ -325,10 +315,3 @@ TabPanel.propTypes = {
   index: PropTypes.any.isRequired,
   value: PropTypes.any.isRequired,
 };
-
-// function a11yProps(index) {
-//   return {
-//     id: `simple-tab-${index}`,
-//     'aria-controls': `simple-tabpanel-${index}`,
-//   };
-// }

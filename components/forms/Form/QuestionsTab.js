@@ -264,7 +264,8 @@ function QuestionsTab(props) {
       case "singleSelection":
         return (
           <SingleSelection
-            optionText={text}
+            optionData={data}
+            edit
             handleOptionValue={handleOptionValue}
             i={i}
             j={j}
@@ -275,7 +276,8 @@ function QuestionsTab(props) {
       case "multiSelection":
         return (
           <MultiSelection
-            optionText={text}
+            optionData={data}
+            edit
             handleOptionValue={handleOptionValue}
             questionIndex={i}
             optionIndex={j}
@@ -287,6 +289,7 @@ function QuestionsTab(props) {
         return (
           <TextDataField
             optionData={data}
+            edit
             handleOptionValue={handleOptionValue}
             questionIndex={i}
             optionIndex={j}
@@ -298,6 +301,7 @@ function QuestionsTab(props) {
         return (
           <DateField
             optionData={data}
+            edit
             handleOptionValue={handleOptionValue}
             questionIndex={i}
             optionIndex={j}
@@ -310,6 +314,7 @@ function QuestionsTab(props) {
           <DateField
             time
             optionData={data}
+            edit
             handleOptionValue={handleOptionValue}
             questionIndex={i}
             optionIndex={j}
@@ -321,6 +326,7 @@ function QuestionsTab(props) {
         return (
           <Rating
             optionData={data}
+            edit
             handleOptionValue={handleOptionValue}
             questionIndex={i}
             optionIndex={j}
@@ -332,6 +338,7 @@ function QuestionsTab(props) {
         return (
           <FileUploader
             optionData={data}
+            edit
             handleOptionValue={handleOptionValue}
             questionIndex={i}
             optionIndex={j}
@@ -342,7 +349,8 @@ function QuestionsTab(props) {
       case "list":
         return (
           <Dropdown
-            optionText={text}
+            optionData={data}
+            edit
             handleOptionValue={handleOptionValue}
             questionIndex={i}
             optionIndex={j}
@@ -420,20 +428,29 @@ function QuestionsTab(props) {
 
   return (
     <div
-      style={{ marginTop: "15px", marginBottom: "7px", paddingBottom: "30px" }}
+      style={{
+        marginTop: "15px",
+        marginBottom: "7px",
+        paddingBottom: "30px",
+        textAlign: "-webkit-center",
+      }}
     >
       <Grid
         container
         direction="column"
         justifyContent="center"
         alignItems="center"
+        xs={12}
+        sm={9}
+        lg={5}
+        md={6}
       >
         {loadingFormData ? <CircularProgress /> : ""}
 
-        <Grid item xs={12} sm={5} style={{ width: "100%" }}>
-          <FormHeader name={formData.name} description={formData.description} />
+        <Grid item style={{ width: "100%", textAlign: "initial" }}>
+          <FormHeader formData={formData} />
 
-          <Grid style={{ paddingTop: "10px" }}>
+          <div item style={{ paddingTop: "10px" }}>
             <div>
               <ImageUplaodModel
                 handleImagePopOpen={openUploadImagePop}
@@ -463,7 +480,7 @@ function QuestionsTab(props) {
                 <Button>Test</Button>
               </div>
             </div>
-          </Grid>
+          </div>
         </Grid>
       </Grid>
     </div>
